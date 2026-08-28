@@ -11,49 +11,42 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Depoyu indir
         uses: actions/checkout@v4
 
-      - name: Extract source ZIP
+      - name: ZIP dosyasını çıkar
         run: |
           unzip -q SimpleVoiceChatAEC-1.0.0-source.zip -d extracted
 
-      - name: Setup Java 25
+      - name: Java 25 kur
         uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '25'
-          cache: gradle
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-
-      - name: Fix Gradle Wrapper
+      - name: Gradle Wrapper'ı düzelt
         working-directory: extracted/SimpleVoiceChatAEC
         run: |
           chmod +x gradlew
           sed -i 's/DEFAULT_JVM_OPTS=.*/DEFAULT_JVM_OPTS="-Xmx64m -Xms64m"/' gradlew
           grep DEFAULT_JVM_OPTS gradlew
 
+      - name: Java sürümünü kontrol et
+        run: |
+          java -version
+          echo "JAVA_HOME=$JAVA_HOME"
+
+      - name: Gradle sürümünü kontrol et
+        working-directory: extracted/SimpleVoiceChatAEC
+        run: |
+          ./gradlew --version
+
       - name: Build
         working-directory: extracted/SimpleVoiceChatAEC
         run: |
-          set +e
-          ./gradlew build --no-daemon --stacktrace > build.log 2>&1
-          EXIT_CODE=$?
-          cat build.log
-          echo "BUILD_EXIT_CODE=$EXIT_CODE" >> "$GITHUB_ENV"
-          exit $EXIT_CODE
+          ./gradlew build --no-daemon --stacktrace
 
-      - name: Upload build log
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-log
-          path: extracted/SimpleVoiceChatAEC/build.log
-          if-no-files-found: warn
-
-      - name: Upload JAR
+      - name: JAR dosyasını yükle
         if: success()
         uses: actions/upload-artifact@v4
         with:
