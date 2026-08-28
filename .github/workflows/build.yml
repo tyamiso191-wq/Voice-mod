@@ -15,30 +15,30 @@ jobs:
         uses: actions/checkout@v4
 
       - name: ZIP dosyasını kontrol et ve çıkar
-  run: |
-    echo "ZIP kontrol ediliyor..."
-    file SimpleVoiceChatAEC-1.0.0-source.zip
-    unzip -t SimpleVoiceChatAEC-1.0.0-source.zip
+        run: |
+          echo "ZIP kontrol ediliyor..."
+          file SimpleVoiceChatAEC-1.0.0-source.zip
+          unzip -t SimpleVoiceChatAEC-1.0.0-source.zip
 
-    echo "ZIP çıkarılıyor..."
-    rm -rf extracted
-    mkdir extracted
-    unzip -q SimpleVoiceChatAEC-1.0.0-source.zip -d extracted
+          echo "ZIP çıkarılıyor..."
+          rm -rf extracted
+          mkdir extracted
+          unzip -q SimpleVoiceChatAEC-1.0.0-source.zip -d extracted
 
-    echo "Çıkarılan dosyalar:"
-    find extracted -maxdepth 3 -type f | sort
+          echo "Çıkarılan dosyalar:"
+          find extracted -maxdepth 3 -type f | sort
 
       - name: Java 21 kur
         uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '21'
+          cache: gradle
 
-      - name: Gradle Wrapper'ı güncelle
+      - name: Gradle Wrapper'ı hazırla
         working-directory: extracted/SimpleVoiceChatAEC
         run: |
           chmod +x gradlew
-          sed -i 's#gradle-8.12-bin.zip#gradle-9.0.0-bin.zip#' gradle/wrapper/gradle-wrapper.properties
           sed -i 's/DEFAULT_JVM_OPTS=.*/DEFAULT_JVM_OPTS="-Xmx64m -Xms64m"/' gradlew
 
       - name: Java sürümünü kontrol et
