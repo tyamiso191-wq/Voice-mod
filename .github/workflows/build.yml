@@ -55,6 +55,12 @@ jobs:
         run: |
           ./gradlew --version
 
+      - name: Fabric API sürümünü kontrol et
+        working-directory: extracted/SimpleVoiceChatAEC
+        run: |
+          echo "Fabric API sürümü:"
+          grep fabric_version gradle.properties
+
       - name: Modu derle
         working-directory: extracted/SimpleVoiceChatAEC
         run: |
