@@ -14,9 +14,19 @@ jobs:
       - name: Depoyu indir
         uses: actions/checkout@v4
 
-      - name: ZIP dosyasını çıkar
-        run: |
-          unzip -q SimpleVoiceChatAEC-1.0.0-source.zip -d extracted
+      - name: ZIP dosyasını kontrol et ve çıkar
+  run: |
+    echo "ZIP kontrol ediliyor..."
+    file SimpleVoiceChatAEC-1.0.0-source.zip
+    unzip -t SimpleVoiceChatAEC-1.0.0-source.zip
+
+    echo "ZIP çıkarılıyor..."
+    rm -rf extracted
+    mkdir extracted
+    unzip -q SimpleVoiceChatAEC-1.0.0-source.zip -d extracted
+
+    echo "Çıkarılan dosyalar:"
+    find extracted -maxdepth 3 -type f | sort
 
       - name: Java 21 kur
         uses: actions/setup-java@v5
