@@ -39,7 +39,11 @@ jobs:
         working-directory: extracted/SimpleVoiceChatAEC
         run: |
           chmod +x gradlew
+          sed -i 's#gradle-8.12-bin.zip#gradle-8.14-bin.zip#' gradle/wrapper/gradle-wrapper.properties
           sed -i 's/DEFAULT_JVM_OPTS=.*/DEFAULT_JVM_OPTS="-Xmx64m -Xms64m"/' gradlew
+
+          echo "Gradle Wrapper:"
+          cat gradle/wrapper/gradle-wrapper.properties
 
       - name: Java sürümünü kontrol et
         run: |
