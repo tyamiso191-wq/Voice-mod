@@ -24,12 +24,12 @@ jobs:
           distribution: temurin
           java-version: '25'
 
-      - name: Gradle Wrapper'ı düzelt
+      - name: Gradle Wrapper'ı güncelle
         working-directory: extracted/SimpleVoiceChatAEC
         run: |
           chmod +x gradlew
+          sed -i 's#gradle-8.12-bin.zip#gradle-9.0.0-bin.zip#' gradle/wrapper/gradle-wrapper.properties
           sed -i 's/DEFAULT_JVM_OPTS=.*/DEFAULT_JVM_OPTS="-Xmx64m -Xms64m"/' gradlew
-          grep DEFAULT_JVM_OPTS gradlew
 
       - name: Java sürümünü kontrol et
         run: |
@@ -41,7 +41,7 @@ jobs:
         run: |
           ./gradlew --version
 
-      - name: Build
+      - name: Modu derle
         working-directory: extracted/SimpleVoiceChatAEC
         run: |
           ./gradlew build --no-daemon --stacktrace
