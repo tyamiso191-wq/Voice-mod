@@ -17,11 +17,9 @@ jobs:
       - name: Extract source ZIP
         run: |
           unzip -q SimpleVoiceChatAEC-1.0.0-source.zip -d extracted
-          echo "Extracted project:"
-          find extracted/SimpleVoiceChatAEC -maxdepth 2 -type f
 
       - name: Setup Java 25
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '25'
@@ -40,9 +38,23 @@ jobs:
       - name: Build
         working-directory: extracted/SimpleVoiceChatAEC
         run: |
-          ./gradlew build --no-daemon --stacktrace
+          set +e
+          ./gradlew build --no-daemon --stacktrace > build.log 2>&1
+          EXIT_CODE=$?
+          cat build.log
+          echo "BUILD_EXIT_CODE=$EXIT_CODE" >> "$GITHUB_ENV"
+          exit $EXIT_CODE
+
+      - name: Upload build log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log
+          path: extracted/SimpleVoiceChatAEC/build.log
+          if-no-files-found: warn
 
       - name: Upload JAR
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: SimpleVoiceChatAEC
