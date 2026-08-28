@@ -18,11 +18,11 @@ jobs:
         run: |
           unzip -q SimpleVoiceChatAEC-1.0.0-source.zip -d extracted
 
-      - name: Java 25 kur
+      - name: Java 21 kur
         uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: '25'
+          java-version: '21'
 
       - name: Gradle Wrapper'ı güncelle
         working-directory: extracted/SimpleVoiceChatAEC
